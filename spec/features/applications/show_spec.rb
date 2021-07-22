@@ -8,6 +8,9 @@ RSpec.describe 'the application show page' do
     @pet_2 = Pet.create(name: 'Marty', age: 9, breed: 'German Shepard', adoptable: true, shelter_id: @shelter.id)
     @pet_3 = Pet.create(name: 'Taco', age: 4, breed: 'Malamute', adoptable: true, shelter_id: @shelter.id)
     @pet_4 = Pet.create(name: 'Steven', age: 2, breed: 'Komondor', adoptable: true, shelter_id: @shelter.id)
+    @pet_5 = Pet.create(name: 'Stevo', age: 7, breed: 'Husky', adoptable: true, shelter_id: @shelter.id)
+    @pet_6 = Pet.create(name: 'Stevie', age: 1, breed: 'Great Floofster', adoptable: true, shelter_id: @shelter.id)
+    @pet_7 = Pet.create(name: 'Stevemeister', age: 11, breed: 'Shaggy Cuddler', adoptable: true, shelter_id: @shelter.id)
 
     @application_1 = Application.create!(name: 'Sebastian Hastings',
                                          street_address: '123 Ilyeria Drive',
@@ -65,7 +68,7 @@ RSpec.describe 'the application show page' do
 
     fill_in :search, with: "#{@pet_2.name}"
     click_button "Give me the fuzz"
-    click_button "Adopt Me ❤️ "
+    click_button "Adopt Me"
 
     expect(@pet_2.name).to appear_before("Give me the fuzz")
   end
@@ -76,7 +79,7 @@ RSpec.describe 'the application show page' do
 
     fill_in :description, with: "Do you like cheese?"
     click_button "Submit"
-    save_and_open_page
+
     expect(page).to have_content("Pending")
     expect(page).to_not have_content("Give me the fuzz")
   end
@@ -89,5 +92,31 @@ RSpec.describe 'the application show page' do
     click_button "Give me the fuzz"
 
     expect(page).to_not have_content("Submit")
+  end
+
+  # User Story 8
+  it 'will return all valid searches for a partial search' do
+    visit "/applications/#{@application_2.id}"
+
+    fill_in :search, with: "Stev"
+    click_button "Give me the fuzz"
+
+    expect(page).to have_content(@pet_4.name)
+    expect(page).to have_content(@pet_5.name)
+    expect(page).to have_content(@pet_6.name)
+    expect(page).to have_content(@pet_7.name)
+  end
+
+  # User Story 9
+  it 'is case insensetive for searches' do
+    visit "/applications/#{@application_2.id}"
+
+    fill_in :search, with: "stev"
+    click_button "Give me the fuzz"
+
+    expect(page).to have_content(@pet_4.name)
+    expect(page).to have_content(@pet_5.name)
+    expect(page).to have_content(@pet_6.name)
+    expect(page).to have_content(@pet_7.name)
   end
 end
