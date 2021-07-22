@@ -7,7 +7,6 @@ RSpec.describe 'application creation' do
                                          city: 'Burnaby',
                                          state: 'CA',
                                          zip_code: 88925,
-                                         description: 'Do you like cheese?',
                                          status: 'In Progress')
 
     @application_2 = Application.create!(name: 'Viola Hastings',
@@ -15,7 +14,6 @@ RSpec.describe 'application creation' do
                                          city: 'Madison',
                                          state: 'WI',
                                          zip_code: 67119,
-                                         description: 'I get really bad nose bleeds.',
                                          status: 'In Progress')
   end
 
@@ -28,12 +26,11 @@ RSpec.describe 'application creation' do
     fill_in("City", with: "Madison")
     fill_in("State", with: "WI")
     fill_in("Zip code", with: "67119")
-    fill_in("Description", with: "I get really bad nose bleeds.")
 
     click_on "Submit"
 
     expect(current_path).to eq("/applications/#{Application.last.id}")
-    expect(page).to have_content("I get really bad nose bleeds.")
+    expect(page).to have_content("67119")
   end
 
   #User Story 3
@@ -47,6 +44,6 @@ RSpec.describe 'application creation' do
 
     click_on "Submit"
 
-    expect(page).to have_content("Error: Zip code can't be blank, Description can't be blank")
+    expect(page).to have_content("Error: Zip code can't be blank")
   end
 end
